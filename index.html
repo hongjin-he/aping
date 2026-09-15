@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阿平 A-Ping</title>
+<meta name="description" content="A Cantonese-speaking home companion device for Hong Kong families who cannot afford a domestic helper. ISOM 2010 group project.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;500;700&family=Noto+Serif+HK:wght@600;700&display=swap">
+<style>
+:root{
+  --bg:#F3F5F2; --surface:#FFFFFF; --surface-2:#E8EDE7; --ink:#161E1A; --muted:#5B6B62;
+  --line:#D4DCD4; --accent:#0F6B4F; --accent-soft:#D8E9DE; --accent-ink:#0A4B37;
+  --hat:#1478E0; --hat-dark:#0F5FB4; --warm:#B4552A; --warm-soft:#F4E2D8;
+  --shadow:0 1px 2px rgba(22,30,26,.05), 0 10px 30px rgba(22,30,26,.08);
+  --serif:"Noto Serif HK","Songti SC",Georgia,serif;
+  --sans:"Noto Sans HK","PingFang HK","PingFang SC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101512; --surface:#18201B; --surface-2:#212B24; --ink:#E7EDE8; --muted:#9AAAA0;
+    --line:#2B372F; --accent:#57C295; --accent-soft:#1D3229; --accent-ink:#8FDCB8;
+    --hat:#3B95F0; --hat-dark:#1F6FC0; --warm:#E0895E; --warm-soft:#32231B;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101512; --surface:#18201B; --surface-2:#212B24; --ink:#E7EDE8; --muted:#9AAAA0;
+  --line:#2B372F; --accent:#57C295; --accent-soft:#1D3229; --accent-ink:#8FDCB8;
+  --hat:#3B95F0; --hat-dark:#1F6FC0; --warm:#E0895E; --warm-soft:#32231B;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+section{padding:clamp(40px,7vw,72px) 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+h1{font-family:var(--serif);font-size:clamp(40px,8vw,68px);line-height:1.05;letter-spacing:.02em}
+h2{font-family:var(--serif);font-size:clamp(21px,3.4vw,27px);letter-spacing:.02em;margin-bottom:6px}
+h3{font-size:16.5px;font-weight:700}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.lede{font-size:clamp(16px,2.2vw,19px);max-width:36em;color:var(--ink)}
+.sub{color:var(--muted);font-size:14.5px;max-width:42em}
+
+/* top bar */
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.topin{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 20px;max-width:1040px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--serif);font-size:17px}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.langtog{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+.langtog button{font-family:var(--sans);font-size:12.5px;font-weight:500;padding:6px 14px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.langtog button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* hero */
+.hero{display:grid;gap:clamp(24px,5vw,54px);grid-template-columns:1fr;align-items:center}
+@media(min-width:840px){.hero{grid-template-columns:1.05fr .95fr}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{font-size:12.5px;padding:5px 11px;border-radius:7px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.chip.no{background:var(--warm-soft);color:var(--warm)}
+.stagewrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.pedestal{width:100%;max-width:340px;aspect-ratio:1/.88;background:var(--surface);border:1px solid var(--line);
+  border-radius:22px;box-shadow:var(--shadow);display:grid;place-items:center;padding:22px}
+svg.aping{width:100%;height:auto;max-width:250px;overflow:visible}
+.eyelid{transform-origin:center;animation:blink 6.5s infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(0)}96%,98%{transform:scaleY(1)}}
+.speaking .mouthwave rect{animation:sw .7s ease-in-out infinite}
+.mouthwave rect:nth-child(2){animation-delay:.1s}
+.mouthwave rect:nth-child(3){animation-delay:.2s}
+.mouthwave rect:nth-child(4){animation-delay:.3s}
+.mouthwave rect:nth-child(5){animation-delay:.4s}
+@keyframes sw{0%,100%{height:4px;y:60px}50%{height:15px;y:54px}}
+.mouthwave{opacity:0;transition:opacity .25s}
+.speaking .mouthwave{opacity:1}
+
+/* demo */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 18px}
+.tabs button{font-family:var(--sans);font-size:13.5px;font-weight:500;padding:9px 16px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:.15s}
+.tabs button:hover{border-color:var(--accent)}
+.tabs button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.demo{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:860px){.demo{grid-template-columns:1.3fr .85fr;align-items:start}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.phead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line)}
+.tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.clock{font-variant-numeric:tabular-nums;font-size:13px;color:var(--accent);font-weight:700}
+.scene{display:flex;gap:16px;padding:18px 16px;min-height:270px}
+.minidev{flex:none;width:96px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.script{flex:1;display:flex;flex-direction:column;gap:11px}
+.line{opacity:0;transform:translateY(5px);animation:rise .3s ease forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.who{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.bubble{font-family:var(--serif);font-size:16px;padding:10px 13px;border-radius:13px;background:var(--surface-2)}
+.line.ap .bubble{background:var(--accent-soft);color:var(--accent-ink);border-bottom-left-radius:4px}
+.line.elder .bubble{border-bottom-right-radius:4px}
+.line.cue{font-size:13px;color:var(--muted);font-style:italic}
+.ctrls{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.ctrls button{font-family:var(--sans);font-size:12.5px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);
+  background:transparent;color:var(--muted);cursor:pointer}
+.ctrls button:hover{border-color:var(--accent);color:var(--accent)}
+.track{flex:1;height:4px;border-radius:2px;background:var(--surface-2);overflow:hidden}
+.bar{height:100%;width:0;background:var(--accent);transition:width .2s linear}
+.dur{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.feed{padding:16px}
+.feed h3{margin-bottom:2px}
+.feed .sub{font-size:12.5px;margin-bottom:10px}
+.ev{display:flex;gap:11px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;opacity:0;animation:rise .3s ease forwards}
+.ev:first-of-type{border-top:0}
+.ev time{flex:none;width:58px;color:var(--muted);font-variant-numeric:tabular-nums;font-size:12.5px}
+.ev .dt{flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:7px}
+.ev.wait .dt{background:var(--muted)}
+.note{font-size:12.5px;color:var(--muted);padding:0 16px 16px}
+
+/* cards */
+.grid3{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:700px){.grid3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:7px}
+.card .n{font-family:var(--serif);font-size:12.5px;color:var(--accent);letter-spacing:.1em}
+.card p{font-size:14px;color:var(--muted)}
+
+/* price */
+.price{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.bar2{display:flex;flex-direction:column;gap:7px}
+.bar2 .top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:14.5px}
+.bar2 .val{font-variant-numeric:tabular-nums;font-weight:700}
+.tr2{height:11px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.fl{height:100%;border-radius:6px}
+.fl.h{width:100%;background:var(--warm)}
+.fl.a{width:13%;background:var(--accent)}
+
+/* ladder */
+.ladder{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+.rung{display:flex;gap:14px;padding:14px 16px;border-top:1px solid var(--line);align-items:baseline}
+.rung:first-child{border-top:0}
+.rung .lv{font-family:var(--serif);font-size:13px;color:var(--muted);flex:none;width:26px}
+.rung span.d{font-size:13.5px;color:var(--muted)}
+.rung.future{background:var(--surface-2)}
+
+footer{padding:30px 0 56px;color:var(--muted);font-size:13px}
+footer .who2{display:flex;flex-wrap:wrap;gap:10px 22px;margin-bottom:12px;color:var(--ink);font-size:14px}
+
+/* 3D viewer */
+.v3{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:900px){.v3{grid-template-columns:1.25fr .85fr;align-items:start}}
+#viewer{width:100%;height:440px;background:radial-gradient(120% 100% at 50% 0%,var(--surface) 0%,var(--surface-2) 100%);
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);position:relative}
+#viewer canvas{display:block}
+.v3ctrl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.v3ctrl label{font-size:12.5px;color:var(--muted);white-space:nowrap}
+input[type=range]{flex:1;min-width:150px;accent-color:var(--accent)}
+.v3ctrl button{font-family:var(--sans);font-size:12.5px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.v3ctrl button:hover{border-color:var(--accent);color:var(--accent)}
+#partList{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+#partList button{font-family:var(--sans);font-size:12.5px;padding:6px 12px;border-radius:8px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink);cursor:pointer;transition:.15s}
+#partList button:hover{border-color:var(--accent)}
+#partList button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+#partList button.warn{color:var(--warm);border-style:dashed}
+#partList button.warn[aria-pressed="true"]{background:var(--warm);border-color:var(--warm);color:var(--surface)}
+#partInfo{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:190px}
+#partInfo h3{margin-bottom:8px;font-family:var(--serif);font-size:18px}
+#partInfo .what{font-size:14.5px;margin-bottom:8px}
+#partInfo .why{font-size:14px;color:var(--muted);margin-bottom:10px}
+#partInfo .cost{font-size:12.5px;color:var(--accent);font-variant-numeric:tabular-nums}
+.nowebgl{padding:18px;font-size:14px;color:var(--muted)}
+
+@media (prefers-reduced-motion: reduce){
+  .line,.ev{animation:none;opacity:1;transform:none}
+  .eyelid,.speaking .mouthwave rect{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="topin">
+    <div class="brand"><span class="dot"></span><span data-zh="阿平 A-Ping" data-en="A-Ping">阿平 A-Ping</span></div>
+    <div class="langtog" role="group" aria-label="Language">
+      <button type="button" data-lang="zh" aria-pressed="true">繁體中文</button>
+      <button type="button" data-lang="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section>
+  <div class="hero">
+    <div>
+      <p class="eyebrow" data-zh="ISOM 2010 小組專案 · 概念階段" data-en="ISOM 2010 Group Project · Concept stage">ISOM 2010 小組專案 · 概念階段</p>
+      <h1 data-zh="阿平" data-en="A-Ping">阿平</h1>
+      <p class="lede" style="margin-top:16px" data-zh="識講廣東話、識主動開口的家居陪伴裝置——為請不起外傭、家中有長者的香港家庭而做。" data-en="A home companion device that speaks Cantonese and starts the conversation itself — built for Hong Kong families who cannot afford a domestic helper but have an elderly parent at home.">識講廣東話、識主動開口的家居陪伴裝置——為請不起外傭、家中有長者的香港家庭而做。</p>
+      <div class="chips">
+        <span class="chip" data-zh="靜止桌面式" data-en="Stationary, sits on a table">靜止桌面式</span>
+        <span class="chip" data-zh="一粒掣，冇選單" data-en="One button, no menus">一粒掣，冇選單</span>
+        <span class="chip no" data-zh="冇鏡頭" data-en="No camera">冇鏡頭</span>
+        <span class="chip" data-zh="物料成本約 US$20（量產）" data-en="Bill of materials ≈ US$20 at volume">物料成本約 US$20（量產）</span>
+      </div>
+    </div>
+
+    <div class="stagewrap">
+      <div class="pedestal">
+        <svg class="aping" id="heroDev" viewBox="0 0 220 200" role="img" aria-label="A-Ping">
+          <defs>
+            <linearGradient id="hatg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="var(--hat)"/><stop offset="1" stop-color="var(--hat-dark)"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="110" cy="186" rx="74" ry="7" fill="var(--line)" opacity=".5"/>
+          <rect x="30" y="168" width="160" height="14" rx="7" fill="var(--surface-2)" stroke="var(--line)"/>
+          <!-- body -->
+          <rect x="34" y="56" width="152" height="112" rx="52" fill="#141B18" stroke="#0C110E"/>
+          <!-- face screen -->
+          <rect x="46" y="66" width="128" height="86" rx="42" fill="#0A0F0C"/>
+          <!-- eyes -->
+          <g fill="#FFFFFF">
+            <path d="M74 104 q10 -13 22 0" stroke="#FFF" stroke-width="9" fill="none" stroke-linecap="round"/>
+            <path d="M124 104 q10 -13 22 0" stroke="#FFF" stroke-width="9" fill="none" stroke-linecap="round"/>
+          </g>
+          <g class="eyelid"><rect x="66" y="88" width="90" height="22" fill="#0A0F0C"/></g>
+          <!-- voice wave -->
+          <g class="mouthwave" fill="var(--accent)">
+            <rect x="88" y="60" width="4" height="4" rx="2"/>
+            <rect x="96" y="60" width="4" height="4" rx="2"/>
+            <rect x="104" y="60" width="4" height="4" rx="2"/>
+            <rect x="112" y="60" width="4" height="4" rx="2"/>
+            <rect x="120" y="60" width="4" height="4" rx="2"/>
+          </g>
+          <!-- knit beanie -->
+          <path d="M48 58 q4 -46 62 -46 q58 0 62 46 q-62 16 -124 0 z" fill="url(#hatg)"/>
+          <g stroke="var(--hat-dark)" stroke-width="1.5" opacity=".45">
+            <path d="M64 50 q2 -34 10 -40"/><path d="M84 46 q1 -34 6 -42"/>
+            <path d="M110 44 v-32"/><path d="M136 46 q-1 -34 -6 -42"/><path d="M156 50 q-2 -34 -10 -40"/>
+          </g>
+          <rect x="38" y="46" width="144" height="26" rx="13" fill="url(#hatg)"/>
+          <g stroke="var(--hat-dark)" stroke-width="1.5" opacity=".5">
+            <path d="M58 50 v18"/><path d="M76 48 v22"/><path d="M94 47 v24"/><path d="M112 47 v24"/>
+            <path d="M130 47 v24"/><path d="M148 48 v22"/><path d="M164 50 v18"/>
+          </g>
+          <circle cx="110" cy="10" r="12" fill="var(--hat)"/>
+          <!-- button -->
+          <circle cx="110" cy="160" r="5" fill="#2A332D"/>
+        </svg>
+      </div>
+      <p class="sub" style="text-align:center;font-size:12.5px" data-zh="效果示意圖。產品尚未製造。" data-en="Concept rendering. The product does not exist yet.">效果示意圖。產品尚未製造。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow" data-zh="產品型態" data-en="Form factor">產品型態</p>
+  <h2 data-zh="為甚麼長成這個樣" data-en="Why it looks like this">為甚麼長成這個樣</h2>
+  <p class="sub" style="margin-bottom:20px" data-zh="每一個設計決定都是針對香港家庭的實際情況，而不是為了好看。" data-en="Every design decision answers a real constraint in a Hong Kong home, not an aesthetic preference.">每一個設計決定都是針對香港家庭的實際情況，而不是為了好看。</p>
+  <div class="grid3">
+    <article class="card">
+      <span class="n">01</span>
+      <h3 data-zh="唔會郁" data-en="It does not move">唔會郁</h3>
+      <p data-zh="香港住宅細，會走動的家用機器人連大公司都做失敗過。固定喺枱面，省下嘅成本全部放入粵語能力。" data-en="Hong Kong flats are small, and mobile home robots have failed even for large firms. Staying put removes most of the cost and nearly all of the safety risk.">香港住宅細，會走動的家用機器人連大公司都做失敗過。固定喺枱面，省下嘅成本全部放入粵語能力。</p>
+    </article>
+    <article class="card">
+      <span class="n">02</span>
+      <h3 data-zh="冇鏡頭" data-en="No camera">冇鏡頭</h3>
+      <p data-zh="同類產品多數裝鏡頭做跌倒偵測。我哋唔裝：客廳就係長者活動嘅全部空間，而且買嘅係子女、用嘅係長輩——裝咗鏡頭，好易變成「子女監視我」。" data-en="Similar products use a camera for fall detection. We do not: the living room is the whole of an older adult's day, and since the child buys it and the parent uses it, a camera reads as surveillance.">同類產品多數裝鏡頭做跌倒偵測。我哋唔裝：客廳就係長者活動嘅全部空間，而且買嘅係子女、用嘅係長輩——裝咗鏡頭，好易變成「子女監視我」。</p>
+    </article>
+    <article class="card">
+      <span class="n">03</span>
+      <h3 data-zh="一粒掣" data-en="One button">一粒掣</h3>
+      <p data-zh="㩒一下開始講嘢，長㩒靜音。所有設定喺子女嗰一端完成，長輩呢邊永遠只有「講」同「唔講」兩個狀態。" data-en="Press to talk, hold to mute. Everything else is configured on the child's phone; on the parent's side there are only two states — talking, or quiet.">㩒一下開始講嘢，長㩒靜音。所有設定喺子女嗰一端完成，長輩呢邊永遠只有「講」同「唔講」兩個狀態。</p>
+    </article>
+  </div>
+</section>
+
+<section id="build">
+  <p class="eyebrow" data-zh="產品結構" data-en="Inside the device">產品結構</p>
+  <h2 data-zh="拆開嚟睇" data-en="Take it apart">拆開嚟睇</h2>
+  <p class="sub" data-zh="拖動可以轉動，滾輪縮放。拉滑桿拆開它，㩒零件睇佢係乜、點解要有、幾多錢。" data-en="Drag to rotate, scroll to zoom. Pull the slider to take it apart, and tap a part to see what it is, why it is there, and what it costs.">拖動可以轉動，滾輪縮放。拉滑桿拆開它，㩒零件睇佢係乜、點解要有、幾多錢。</p>
+
+  <div class="v3" style="margin-top:20px">
+    <div>
+      <div id="viewer"><noscript class="nowebgl">需要 JavaScript 才能顯示 3D 模型。</noscript></div>
+      <div class="v3ctrl">
+        <label for="explode" data-zh="分解" data-en="Exploded view">分解</label>
+        <input type="range" id="explode" min="0" max="100" value="0" aria-label="Exploded view">
+        <button type="button" id="resetView" data-zh="回到初始" data-en="Reset view">回到初始</button>
+      </div>
+    </div>
+    <div>
+      <div id="partList"></div>
+      <div id="partInfo"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow" data-zh="功能演示" data-en="How it works">功能演示</p>
+  <h2 data-zh="佢喺屋企一日做緊乜" data-en="A day in the flat">佢喺屋企一日做緊乜</h2>
+  <p class="sub" data-zh="三段演示，每段約三十秒。㩒一下就會自己播。" data-en="Three scenes, about thirty seconds each. They play on their own.">三段演示，每段約三十秒。㩒一下就會自己播。</p>
+
+  <div class="tabs" id="tabs" role="group" aria-label="Scenes"></div>
+
+  <div class="demo">
+    <div class="panel">
+      <div class="phead">
+        <span class="tag" id="sceneName">—</span>
+        <span class="clock" id="clock">—</span>
+      </div>
+      <div class="scene">
+        <div class="minidev">
+          <svg id="miniDev" viewBox="0 0 220 200" style="width:96px;height:auto;overflow:visible" aria-hidden="true">
+            <rect x="34" y="56" width="152" height="112" rx="52" fill="#141B18"/>
+            <rect x="46" y="66" width="128" height="86" rx="42" fill="#0A0F0C"/>
+            <path d="M74 104 q10 -13 22 0" stroke="#FFF" stroke-width="9" fill="none" stroke-linecap="round"/>
+            <path d="M124 104 q10 -13 22 0" stroke="#FFF" stroke-width="9" fill="none" stroke-linecap="round"/>
+            <g class="eyelid"><rect x="66" y="88" width="90" height="22" fill="#0A0F0C"/></g>
+            <g class="mouthwave" fill="var(--accent)">
+              <rect x="88" y="60" width="4" height="4" rx="2"/><rect x="96" y="60" width="4" height="4" rx="2"/>
+              <rect x="104" y="60" width="4" height="4" rx="2"/><rect x="112" y="60" width="4" height="4" rx="2"/>
+              <rect x="120" y="60" width="4" height="4" rx="2"/>
+            </g>
+            <path d="M48 58 q4 -46 62 -46 q58 0 62 46 q-62 16 -124 0 z" fill="var(--hat)"/>
+            <rect x="38" y="46" width="144" height="26" rx="13" fill="var(--hat)"/>
+            <circle cx="110" cy="10" r="12" fill="var(--hat)"/>
+          </svg>
+        </div>
+        <div class="script" id="script"></div>
+      </div>
+      <div class="ctrls">
+        <button type="button" id="playBtn" data-zh="重播" data-en="Replay">重播</button>
+        <div class="track"><div class="bar" id="bar"></div></div>
+        <span class="dur" id="dur">0s / 30s</span>
+      </div>
+    </div>
+
+    <div class="panel feed">
+      <h3 data-zh="子女手機端" data-en="On the child's phone">子女手機端</h3>
+      <p class="sub" data-zh="同一時間，阿女喺公司睇到" data-en="At the same moment, seen from the office">同一時間，阿女喺公司睇到</p>
+      <div id="feed"></div>
+      <p class="note" id="footnote"></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow" data-zh="價錢" data-en="Price">價錢</p>
+  <h2 data-zh="同請外傭比" data-en="Against hiring a helper">同請外傭比</h2>
+  <div class="price" style="margin-top:18px">
+    <div class="bar2">
+      <div class="top">
+        <span data-zh="請一位外傭（法定必付，每月）" data-en="Hiring a helper (statutory minimum, per month)">請一位外傭（法定必付，每月）</span>
+        <span class="val">HK$6,336</span>
+      </div>
+      <div class="tr2"><div class="fl h"></div></div>
+    </div>
+    <div class="bar2">
+      <div class="top">
+        <span data-zh="阿平月費（暫定）" data-en="A-Ping monthly fee (provisional)">阿平月費（暫定）</span>
+        <span class="val">HK$68–98</span>
+      </div>
+      <div class="tr2"><div class="fl a"></div></div>
+    </div>
+    <p class="sub" data-zh="外傭數字：最低允許工資 $5,100 ＋ 膳食津貼 $1,236，2025-09-30 起生效（勞工處）。連保險、來回機票、簽證攤分，全包約 $6,450–6,650，未計中介費。阿平另加設備一次性 HK$980–1,280（暫定）。所有價錢都係待驗證嘅假設，最終定價由問卷數據決定。" data-en="Helper figures: minimum allowable wage HK$5,100 plus food allowance HK$1,236, effective 30 Sep 2025 (Labour Department). With insurance, flights and visa amortised, the all-in figure is roughly HK$6,450–6,650, excluding agency fees. A-Ping also carries a one-off device price of HK$980–1,280 (provisional). Every price here is a hypothesis we still have to test; the final figure will come from our survey data.">外傭數字：最低允許工資 $5,100 ＋ 膳食津貼 $1,236，2025-09-30 起生效（勞工處）。連保險、來回機票、簽證攤分，全包約 $6,450–6,650，未計中介費。阿平另加設備一次性 HK$980–1,280（暫定）。所有價錢都係待驗證嘅假設，最終定價由問卷數據決定。</p>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow" data-zh="價值階梯" data-en="Value ladder">價值階梯</p>
+  <h2 data-zh="三層，由近到遠" data-en="Three layers, near to far">三層，由近到遠</h2>
+  <div class="ladder" style="margin-top:18px">
+    <div class="rung"><span class="lv">一</span><div><strong data-zh="日常提醒" data-en="Daily reminders">日常提醒</strong> <span class="d" data-zh="食藥、覆診、飲水。今日就做得到。" data-en="Medication, appointments, drinking water. Achievable today.">食藥、覆診、飲水。今日就做得到。</span></div></div>
+    <div class="rung"><span class="lv">二</span><div><strong data-zh="有人傾偈" data-en="Someone to talk to">有人傾偈</strong> <span class="d" data-zh="一日講得上幾句話，唔使由朝靜到晚。" data-en="A few exchanges a day, instead of silence from morning to night.">一日講得上幾句話，唔使由朝靜到晚。</span></div></div>
+    <div class="rung future"><span class="lv">三</span><div><strong data-zh="子女同父母之間嘅橋" data-en="A bridge between parent and child">子女同父母之間嘅橋</strong> <span class="d" data-zh="長遠目標，而家未做到——我哋唔會扮做到。" data-en="A long-term goal. We cannot do this yet, and we will not pretend otherwise.">長遠目標，而家未做到——我哋唔會扮做到。</span></div></div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow" data-zh="研究" data-en="Research">研究</p>
+  <h2 data-zh="我哋點樣驗證" data-en="How we are testing this">我哋點樣驗證</h2>
+  <div class="grid3" style="margin-top:18px">
+    <article class="card">
+      <span class="n">01</span>
+      <h3 data-zh="訪談 12–15 場" data-en="12–15 interviews">訪談 12–15 場</h3>
+      <p data-zh="兩條線並行：長者中心嘅社工，同埋照顧長輩嘅家屬。只問已經發生過嘅事，唔問「你會唔會買」。" data-en="Two tracks in parallel: social workers at district elderly centres, and family carers. We ask what has already happened, never whether someone would buy.">兩條線並行：長者中心嘅社工，同埋照顧長輩嘅家屬。只問已經發生過嘅事，唔問「你會唔會買」。</p>
+    </article>
+    <article class="card">
+      <span class="n">02</span>
+      <h3 data-zh="問卷 n ≥ 100" data-en="Survey, n ≥ 100">問卷 n ≥ 100</h3>
+      <p data-zh="對象係家中有長輩嘅香港住戶，內含價格敏感度測試，所以定價係由受訪者決定，唔係我哋自己講。" data-en="Hong Kong households with an elderly parent, including a price-sensitivity section, so the price follows from respondents rather than from our assumptions.">對象係家中有長輩嘅香港住戶，內含價格敏感度測試，所以定價係由受訪者決定，唔係我哋自己講。</p>
+    </article>
+    <article class="card">
+      <span class="n">03</span>
+      <h3 data-zh="老實講限制" data-en="Stated limitations">老實講限制</h3>
+      <p data-zh="樣本規模有限，部分來自我哋自己嘅人脈，而且我哋四個都唔係粵語母語者——長者訪談由雙語協助者陪同完成。呢啲會寫入報告。" data-en="Our sample is modest and partly drawn from our own networks, and none of us is a native Cantonese speaker; interviews with older adults are done with a bilingual assistant present. All of this goes into the report.">樣本規模有限，部分來自我哋自己嘅人脈，而且我哋四個都唔係粵語母語者——長者訪談由雙語協助者陪同完成。呢啲會寫入報告。</p>
+    </article>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="who2">
+    <span>Hongjin HE</span><span>Yuechen DANG</span><span>Zepeng HUANG</span><span>Zhiyan ZOU</span>
+  </div>
+  <p data-zh="ISOM 2010 Introduction to Information Systems · 香港科技大學 · 2026 年秋季 · 本網頁為課程專案之概念展示，產品尚未製造，所有價格與數據均為待驗證之假設。" data-en="ISOM 2010 Introduction to Information Systems · HKUST · Fall 2026 · This page presents a course project concept. The product does not exist, and every price and figure on it is a hypothesis still to be tested.">ISOM 2010 Introduction to Information Systems · 香港科技大學 · 2026 年秋季 · 本網頁為課程專案之概念展示，產品尚未製造，所有價格與數據均為待驗證之假設。</p>
+</footer>
+</main>
+
+<script>
+(function(){
+  var lang = "zh";
+
+  var SCENES = [
+    {
+      key:"med",
+      label:{zh:"食藥提醒", en:"Medication reminder"},
+      clock:"08:30",
+      foot:{zh:"我哋只記錄「有冇應」，唔會扮知道藥係咪真係食咗。", en:"We record whether he answered — we do not claim to know the pill was swallowed."},
+      beats:[
+        {t:0,  type:"cue", text:{zh:"早上八點半。阿平自己開口，唔使人叫。", en:"8:30 in the morning. A-Ping speaks first; nobody has to ask it to."}},
+        {t:3,  type:"ap", text:{zh:"陳伯，八點半喇，記得食降血壓嗰粒藥。", en:"Mr Chan, it's half past eight — time for your blood pressure tablet."}},
+        {t:8,  type:"elder", text:{zh:"知喇知喇，我飲埋啖水先。", en:"Yes, yes. Let me get some water first."}},
+        {t:12, type:"ap", text:{zh:"好，我等陣再問返你一次。", en:"Alright. I'll check with you again in a little while."}},
+        {t:17, type:"cue", text:{zh:"三十分鐘之後——", en:"Thirty minutes later —"}},
+        {t:20, type:"ap", text:{zh:"陳伯，啱啱嗰粒藥食咗未呀？", en:"Mr Chan, did you take that tablet?"}},
+        {t:24, type:"elder", text:{zh:"食咗喇。", en:"I did."}},
+        {t:27, type:"cue", text:{zh:"阿女嗰邊收到通知，唔使打電話問。", en:"His daughter is notified. She doesn't have to call to find out."}}
+      ],
+      feed:[
+        {t:3,  time:"08:30", txt:{zh:"已提醒：降血壓藥", en:"Reminded: blood pressure tablet"}, done:true},
+        {t:24, time:"09:02", txt:{zh:"陳伯回應：食咗", en:"Mr Chan answered: taken"}, done:true},
+        {t:28, time:"12:30", txt:{zh:"下一次提醒：飯後藥", en:"Next reminder: after-lunch tablet"}, done:false}
+      ]
+    },
+    {
+      key:"chat",
+      label:{zh:"主動傾偈", en:"It starts the conversation"},
+      clock:"10:15",
+      foot:{zh:"唔使等長者開口。佢會自己搭訕，一日幾次。", en:"Nobody has to press a button. It opens the conversation itself, a few times a day."},
+      beats:[
+        {t:0,  type:"cue", text:{zh:"上晝十點幾，屋企得陳伯一個。", en:"Just past ten. Mr Chan is alone in the flat."}},
+        {t:3,  type:"ap", text:{zh:"今日天氣幾好喎，你今朝落咗樓未呀？", en:"It's a nice day. Have you been downstairs this morning?"}},
+        {t:8,  type:"elder", text:{zh:"落咗，去咗街市買餸。", en:"I have — I went to the wet market."}},
+        {t:12, type:"ap", text:{zh:"買咗啲乜嘢好嘢？夠唔夠食兩日？", en:"What did you get? Enough for a couple of days?"}},
+        {t:17, type:"elder", text:{zh:"買咗條魚同幾棵菜。", en:"A fish and some vegetables."}},
+        {t:21, type:"ap", text:{zh:"聽日落雨，出門記得帶遮。", en:"It's going to rain tomorrow — take an umbrella if you go out."}},
+        {t:26, type:"cue", text:{zh:"呢啲唔係閒聊。有冇出門、講唔講到嘢，本身就係訊號。", en:"This is not small talk. Whether he went out, and whether he talks at all, is itself a signal."}}
+      ],
+      feed:[
+        {t:6,  time:{zh:"今日", en:"Today"}, txt:{zh:"有出門：去咗街市", en:"Left home: went to the market"}, done:true},
+        {t:18, time:{zh:"本週", en:"This week"}, txt:{zh:"傾偈 18 次", en:"18 conversations"}, done:true},
+        {t:26, time:"—", txt:{zh:"未見異常", en:"Nothing unusual"}, done:false}
+      ]
+    },
+    {
+      key:"remote",
+      label:{zh:"子女設提醒", en:"Set from the office"},
+      clock:"14:10",
+      foot:{zh:"長輩嗰邊唔使掂手機。所有設定喺子女嗰一端完成。", en:"The parent never touches a phone. Everything is set from the child's side."},
+      beats:[
+        {t:0,  type:"cue", text:{zh:"阿女喺公司，喺手機加咗一個提醒。", en:"His daughter is at work. She adds a reminder on her phone."}},
+        {t:4,  type:"cue", text:{zh:"同步緊……", en:"Syncing…"}},
+        {t:7,  type:"ap", text:{zh:"阿女幫你設咗提醒：下星期二上晝十點覆診。", en:"Your daughter set a reminder for you: hospital appointment, next Tuesday at ten."}},
+        {t:13, type:"elder", text:{zh:"哦，記住喇。", en:"Right — I'll remember."}},
+        {t:17, type:"ap", text:{zh:"記得帶身份證同覆診卡，我當日朝早再提你一次。", en:"Bring your ID card and appointment card. I'll remind you again that morning."}},
+        {t:23, type:"elder", text:{zh:"唔該晒。", en:"Thank you."}},
+        {t:26, type:"cue", text:{zh:"阿女嗰邊見到「已送達」，唔使再打電話確認。", en:"Her screen shows it was delivered. No follow-up phone call needed."}}
+      ],
+      feed:[
+        {t:1,  time:"14:10", txt:{zh:"你設定：覆診提醒", en:"You set: appointment reminder"}, done:true},
+        {t:12, time:"14:11", txt:{zh:"阿平已講俾陳伯聽", en:"A-Ping has told Mr Chan"}, done:true},
+        {t:26, time:{zh:"下週二", en:"Next Tue"}, txt:{zh:"當日朝早再提醒一次", en:"Will remind again that morning"}, done:false}
+      ]
+    }
+  ];
+
+  var DURATION = 30;
+  var current = 0, timers = [], raf = null, startedAt = 0;
+
+  var tabs = document.getElementById("tabs");
+  var script = document.getElementById("script");
+  var feed = document.getElementById("feed");
+  var bar = document.getElementById("bar");
+  var dur = document.getElementById("dur");
+  var clock = document.getElementById("clock");
+  var sceneName = document.getElementById("sceneName");
+  var footnote = document.getElementById("footnote");
+  var miniDev = document.getElementById("miniDev");
+  var heroDev = document.getElementById("heroDev");
+  var playBtn = document.getElementById("playBtn");
+
+  function pick(v){ return (typeof v === "string") ? v : v[lang]; }
+
+  function applyLang(){
+    document.documentElement.lang = (lang === "zh") ? "zh-Hant" : "en";
+    document.querySelectorAll("[data-zh]").forEach(function(el){
+      el.textContent = (lang === "zh") ? el.dataset.zh : el.dataset.en;
+    });
+    document.querySelectorAll(".langtog button").forEach(function(b){
+      b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
+    });
+    buildTabs();
+    play();
+    if (window.APING_MODEL) window.APING_MODEL.setLang(lang);
+  }
+
+  function buildTabs(){
+    tabs.innerHTML = "";
+    SCENES.forEach(function(sc, i){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = pick(sc.label);
+      b.setAttribute("aria-pressed", i === current ? "true" : "false");
+      b.addEventListener("click", function(){ current = i; buildTabs(); play(); });
+      tabs.appendChild(b);
+    });
+  }
+
+  function speak(on){
+    [miniDev, heroDev].forEach(function(el){
+      if (!el) return;
+      if (on) el.classList.add("speaking"); else el.classList.remove("speaking");
+    });
+  }
+
+  function addBeat(b){
+    var wrap = document.createElement("div");
+    if (b.type === "cue"){
+      wrap.className = "line cue";
+      wrap.textContent = pick(b.text);
+    } else {
+      wrap.className = "line " + (b.type === "ap" ? "ap" : "elder");
+      var who = document.createElement("div");
+      who.className = "who";
+      who.textContent = b.type === "ap" ? (lang === "zh" ? "阿平" : "A-Ping")
+                                        : (lang === "zh" ? "陳伯" : "Mr Chan");
+      var bub = document.createElement("div");
+      bub.className = "bubble";
+      bub.textContent = pick(b.text);
+      wrap.appendChild(who); wrap.appendChild(bub);
+    }
+    script.appendChild(wrap);
+    script.scrollTop = script.scrollHeight;
+  }
+
+  function addEvent(ev){
+    var row = document.createElement("div");
+    row.className = "ev" + (ev.done ? "" : " wait");
+    var t = document.createElement("time"); t.textContent = pick(ev.time);
+    var d = document.createElement("span"); d.className = "dt";
+    var s = document.createElement("span"); s.textContent = pick(ev.txt);
+    row.appendChild(t); row.appendChild(d); row.appendChild(s);
+    feed.appendChild(row);
+  }
+
+  function clearTimers(){
+    timers.forEach(clearTimeout); timers = [];
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+  }
+
+  function tick(){
+    var elapsed = (Date.now() - startedAt) / 1000;
+    if (elapsed > DURATION) elapsed = DURATION;
+    bar.style.width = (elapsed / DURATION * 100) + "%";
+    dur.textContent = Math.floor(elapsed) + "s / " + DURATION + "s";
+    if (elapsed < DURATION) raf = requestAnimationFrame(tick);
+  }
+
+  function play(){
+    clearTimers();
+    var sc = SCENES[current];
+    script.innerHTML = ""; feed.innerHTML = "";
+    clock.textContent = sc.clock;
+    sceneName.textContent = pick(sc.label);
+    footnote.textContent = pick(sc.foot);
+    speak(false);
+
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce){
+      sc.beats.forEach(addBeat);
+      sc.feed.forEach(addEvent);
+      bar.style.width = "100%";
+      dur.textContent = DURATION + "s / " + DURATION + "s";
+      return;
+    }
+
+    startedAt = Date.now();
+    raf = requestAnimationFrame(tick);
+
+    sc.beats.forEach(function(b){
+      timers.push(setTimeout(function(){
+        addBeat(b);
+        if (b.type === "ap"){
+          speak(true);
+          timers.push(setTimeout(function(){ speak(false); }, 3200));
+        }
+      }, b.t * 1000));
+    });
+    sc.feed.forEach(function(ev){
+      timers.push(setTimeout(function(){ addEvent(ev); }, ev.t * 1000));
+    });
+  }
+
+  document.querySelectorAll(".langtog button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      lang = btn.dataset.lang;
+      applyLang();
+    });
+  });
+  playBtn.addEventListener("click", play);
+
+  buildTabs();
+  play();
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="model.js"></script>
+</body>
+</html>
